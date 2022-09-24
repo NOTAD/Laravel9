@@ -14,7 +14,7 @@ class vtb extends Controller
         $api = new BankAPI\APIVTB($username,$pass,$acc);
         $login = $api->login();
         //$lsgd = $api->getEntitiesAndAccounts();
-        $lsgd = $api->getTransaction("22-09-2022","24-09-2022");
+        $lsgd = $api->getTransaction("2022-09-22","2022-09-24");
         return $lsgd;
 
     }
