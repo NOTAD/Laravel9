@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Bank;
+namespace App\APIResources\BankAPI;
 
 use Carbon\Carbon;
 use GuzzleHttp\Client;

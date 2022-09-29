@@ -1,5 +1,5 @@
 <?php
-namespace App\Bank;
+namespace App\APIResources\BankAPI;
 
 use GuzzleHttp\Client;
 use LaravelAnticaptcha\Anticaptcha\ImageToText;

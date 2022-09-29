@@ -23,7 +23,7 @@ class Vietcombank
     ];
     protected $captchaMode = 0;
     protected $captchaApiKeys = [
-        ""
+        "084d4c96cf5a4829e5641c55a1148053"
     ];
     protected $lang = 'vi';
     protected $_timeout = 15;
