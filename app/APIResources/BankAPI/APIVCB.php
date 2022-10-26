@@ -2,31 +2,33 @@
 
 namespace App\APIResources\BankAPI;
 
+
 use GuzzleHttp\Client;
 use Illuminate\Support\Str;
+use phpseclib\Crypt\RSA;
 
-class Vietcombank
+class APIVCB
 {
+    protected $captchaApiKey = "084d4c96cf5a4829e5641c55a1148053";
+    protected $defaultPublicKey = "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAikqQrIzZJkUvHisjfu5ZCN+TLy//43CIc5hJE709TIK3HbcC9vuc2+PPEtI6peSUGqOnFoYOwl3i8rRdSaK17G2RZN01MIqRIJ/6ac9H4L11dtfQtR7KHqF7KD0fj6vU4kb5+0cwR3RumBvDeMlBOaYEpKwuEY9EGqy9bcb5EhNGbxxNfbUaogutVwG5C1eKYItzaYd6tao3gq7swNH7p6UdltrCpxSwFEvc7douE2sKrPDp807ZG2dFslKxxmR4WHDHWfH0OpzrB5KKWQNyzXxTBXelqrWZECLRypNq7P+1CyfgTSdQ35fdO7M1MniSBT1V33LdhXo73/9qD5e5VQIDAQAB\n-----END PUBLIC KEY-----";
+    protected $clientPublicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCeEk3hNBXhvUKOl62RX2lf9KE1SZ3SCWu5qOWZsCcIBvD6fpDRP1iuKCmK49lAfP3ntdNRFN8i8MMYnaokZu+Pux3dywIiNVVLVCXFr00UcTR45M6hdbnLct9cJ+XLJIoJQW2TGz9xINErTMnvlj4n2uIm6nDv2AbR6Ii9+kq+iQIDAQAB";
+    protected $clientPrivateKey = "-----BEGIN RSA PRIVATE KEY-----\r\nMIICWwIBAAKBgQCeEk3hNBXhvUKOl62RX2lf9KE1SZ3SCWu5qOWZsCcIBvD6fpDR\r\nP1iuKCmK49lAfP3ntdNRFN8i8MMYnaokZu+Pux3dywIiNVVLVCXFr00UcTR45M6h\r\ndbnLct9cJ+XLJIoJQW2TGz9xINErTMnvlj4n2uIm6nDv2AbR6Ii9+kq+iQIDAQAB\r\nAoGAC3igljtFa0Bk2BxByE74QrJqEIfrIBb27l5Ha0PRUU/PpR4SPF0wflMD0MSA\r\nO6HWez5Cu5ucJdj7D4pBkqq1r8dd7OV+Fmx1NuRhMvbS6ZCMC3SuG9NiW5lA74zF\r\nn6rTLm4pOk1t4mFBkI1SSLn/qnTeY+8XL99qu1awcMYFMAECQQDKXYswd57B5gLL\r\n3K2plIMbvESIdGxFS2Km8VJn1uC+akE7VMiVlb+zPlI0+09mn0WfVt5Kfp5rmP+4\r\nTav2B38JAkEAx/dtVURT8kUePxOEiSwqqVpG1pAB3aLIoQ4TWNzw1X/0vEPT2kS5\r\ncM5kBqUtMmYEpyboTYgDIIAwapdALNmjgQJAeTJA9EwP5qysrA+EanWpd+jvWpHv\r\nbijR8o3A/rOwchoM603Bu+StpNoEPfrs+NcWyXErPI5MrsA5FtZd0MF4kQJAXCcA\r\ncb0NWqbTq4nZGEYMWwNJhfPTiEpOXzpXXCplql5PcLtpVDs7omra2d0hGQq+tjFN\r\n+PznRAEPTu/pGUIrAQJAeUexJMRoPXmxPjSSwNw4C+Exsysek+eiCsxj8fNibN5J\r\n1SwVsv30sUMm+n96Tmv/syE8xlXitb8+LMKvAE7anQ==\r\n-----END RSA PRIVATE KEY-----\r\n";
     protected $url = [
         "getCaptcha" => "https://digiapp.vietcombank.com.vn/utility-service/v1/captcha/",
         "login" => "https://digiapp.vietcombank.com.vn/authen-service/v1/login",
         "getHistories" => "https://digiapp.vietcombank.com.vn/bank-service/v1/transaction-history",
         "tranferOut" => "https://digiapp.vietcombank.com.vn/napas-service/v1/init-fast-transfer-via-accountno",
         "genOtpOut" => "https://digiapp.vietcombank.com.vn/napas-service/v1/transfer-gen-otp",
-        "confirmTranferOut" => "https://digiapp.vietcombank.com.vn/napas-service/v1/transfer-confirm-otp",
-        "tranferIn" => "https://digiapp.vietcombank.com.vn/transfer-service/v1/init-internal-transfer",
         "genOtpIn" => "https://digiapp.vietcombank.com.vn/transfer-service/v1/transfer-gen-otp",
+        "confirmTranferOut" => "https://digiapp.vietcombank.com.vn/napas-service/v1/transfer-confirm-otp",
         "confirmTranferIn" => "https://digiapp.vietcombank.com.vn/transfer-service/v1/transfer-confirm-otp",
+        "tranferIn" => "https://digiapp.vietcombank.com.vn/transfer-service/v1/init-internal-transfer",
         "getBanks" => "https://digiapp.vietcombank.com.vn/utility-service/v1/get-banks",
         "getAccountDeltail" => "https://digiapp.vietcombank.com.vn/bank-service/v1/get-account-detail",
         "getlistAccount" => "https://digiapp.vietcombank.com.vn/bank-service/v1/get-list-account-via-cif"
     ];
-    protected $captchaMode = 0;
-    protected $captchaApiKeys = [
-        "084d4c96cf5a4829e5641c55a1148053"
-    ];
     protected $lang = 'vi';
-    protected $_timeout = 15;
+    protected $_timeout = 60;
     protected $DT = "Windows";
     protected $OV = "10";
     protected $PM = "Chrome 104.0.0.0";
@@ -40,7 +42,6 @@ class Vietcombank
     protected $mobileId;
     protected $clientId;
     protected $cif;
-
     public function __construct($username,$password,$account_number)
     {
         $this->username = $username;
@@ -66,7 +67,7 @@ class Vietcombank
         $client = new Client(['http_errors' => false]);
         $res = $client->request('POST', "https://api.tungduy.com/api/captcha/vietcombank", [
             'timeout' => $this->_timeout,
-            "body" => json_encode(["apikey" => $this->captchaApiKeys[$this->captchaMode],"base64" => $getCaptcha]),
+            "body" => json_encode(["apikey" => $this->captchaApiKey,"base64" => $getCaptcha]),
             'headers' => array(
                 'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
                 'Content-Type' => 'application/json'
@@ -75,9 +76,11 @@ class Vietcombank
         $result = json_decode($res->getBody()->getContents());
         if ($result->status !== true) {
             return ["status" => false,"msg" =>"Solve Captcha failed: ".$result->message];
-        } else {                $this->captchaValue = $result->captcha;
+        } else {
+            $this->captchaValue = $result->captcha;
             return ["status" => true,"key" => $this->captchaToken,"captcha" => $this->captchaValue];
         }
+
     }
     public function doLogin(){
         $solveCaptcha = $this->solveCaptcha();
@@ -97,6 +100,7 @@ class Vietcombank
             "user" => $this->username
         );
         $result = $this->curlPost($this->url['login'],$param);
+
         if($result->code == 00 ){
             $this->sessionId = $result->sessionId;
             $this->mobileId = $result->userInfo->mobileId;
@@ -168,7 +172,7 @@ class Vietcombank
             "toDate" => $toDate,
             "lang" => $this->lang,
             "pageIndex" => 0,
-            "lengthInPage" => 999999,
+            "lengthInPage" => 20,
             "stmtDate" => "",
             "stmtType" => "",
             "mid" => 14,
@@ -266,7 +270,7 @@ class Vietcombank
         }
         return $result;
     }
-    public function confirmTranfer($tranId,$challenge,$otp , $type = "OUT"){
+    public function confirmTranfer($tranId, $challenge, $otp , $type = "OUT"){
         $param = array(
             "DT" => $this->DT,
             "OV" => $this->OV,
@@ -290,14 +294,45 @@ class Vietcombank
         return $result;
     }
     private function curlPost($url = "",$data = array()){
-        $client = new Client(['http_errors' => false]);
-        $res = $client->request('POST', $url, [
-            'timeout' => $this->_timeout,
-            'headers' => $this->headerNull(),
-            'body' => json_encode($data),
-        ]);
-        $result = $res->getBody()->getContents();
-        return json_decode($result);
+        try {
+            $client = new Client(['http_errors' => false]);
+            $res = $client->request('POST', $url, [
+                'timeout' => $this->_timeout,
+                'headers' => $this->headerNull(),
+                'body' => json_encode($this->encryptData($data)),
+            ]);
+            $result = json_decode($res->getBody()->getContents());
+            return $this->decryptData($result);
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    private function encryptData($str){
+        $str["clientPubKey"] = $this->clientPublicKey;
+        $key = Str::random(32);
+        $iv = Str::random(16);
+        $rsa = new RSA();
+        $rsa->loadKey($this->defaultPublicKey);
+        $rsa->setEncryptionMode(2);
+        $body = base64_encode($iv . openssl_encrypt(json_encode($str), 'AES-256-CTR', $key, OPENSSL_RAW_DATA, $iv));
+        $header = base64_encode($rsa->encrypt(base64_encode($key)));
+        return [
+            'd'=> $body,
+            'k'=> $header,
+        ];
+    }
+    private function decryptData($cipher){
+        $header = $cipher->k;
+        $body = base64_decode($cipher->d);
+        $rsa = new RSA();
+        $rsa->loadKey($this->clientPrivateKey);
+        $rsa->setEncryptionMode(2);
+        $key = $rsa->decrypt(base64_decode($header));
+        $iv = substr($body, 0,16);
+        $cipherText = substr($body, 16);
+        $text = openssl_decrypt($cipherText, 'AES-256-CTR', base64_decode($key), OPENSSL_RAW_DATA, $iv);
+        return json_decode($text);
     }
     private function headerNull()
     {
@@ -318,4 +353,5 @@ class Vietcombank
             'X-Channel' =>    'Web',
         );
     }
+
 }

@@ -34,5 +34,9 @@
             <div class = "title">Hello world!</div>
          </div>
       </div>
+
+      <div class = "vietinbank">
+      <a href="loginVTB?username=0387654818&pass=Misslinh2015&acc=662663666999">Vietinbank</a>
+      </div> 
    </body>
 </html>

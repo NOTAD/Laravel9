@@ -5,14 +5,14 @@ namespace App\APIResources\BankAPI;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 
-class MbBank
+class MBB
 {
     protected $account;
     protected $_timeout = 15;
     protected $captchaCode = "";
     protected $captchaImage = "";
     protected $client;
-	protected $captchaKey = "";
+	  protected $captchaKey = "084d4c96cf5a4829e5641c55a1148053";
     public function __construct($account)
     {
         $this->account = (object) $account;

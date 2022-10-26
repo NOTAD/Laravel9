@@ -49,7 +49,7 @@ class ApiBankController extends Controller
             $Spassword = strval($password);
             $Sacc = strval($acc);
 
-        $api = new BankAPI\Vietcombank($Susername, $Spassword, $Sacc);
+        $api = new BankAPI\APIVCB($Susername, $Spassword, $Sacc);
         $login = $api->doLogin();
         return ($login);
         // }
