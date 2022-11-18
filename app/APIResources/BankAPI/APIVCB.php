@@ -9,7 +9,7 @@ use phpseclib\Crypt\RSA;
 
 class APIVCB
 {
-    protected $captchaApiKey = "084d4c96cf5a4829e5641c55a1148053";
+    protected $captchaApiKey = "duy72c70ebc61c8c9a1426afae9cc378";
     protected $defaultPublicKey = "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAikqQrIzZJkUvHisjfu5ZCN+TLy//43CIc5hJE709TIK3HbcC9vuc2+PPEtI6peSUGqOnFoYOwl3i8rRdSaK17G2RZN01MIqRIJ/6ac9H4L11dtfQtR7KHqF7KD0fj6vU4kb5+0cwR3RumBvDeMlBOaYEpKwuEY9EGqy9bcb5EhNGbxxNfbUaogutVwG5C1eKYItzaYd6tao3gq7swNH7p6UdltrCpxSwFEvc7douE2sKrPDp807ZG2dFslKxxmR4WHDHWfH0OpzrB5KKWQNyzXxTBXelqrWZECLRypNq7P+1CyfgTSdQ35fdO7M1MniSBT1V33LdhXo73/9qD5e5VQIDAQAB\n-----END PUBLIC KEY-----";
     protected $clientPublicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCeEk3hNBXhvUKOl62RX2lf9KE1SZ3SCWu5qOWZsCcIBvD6fpDRP1iuKCmK49lAfP3ntdNRFN8i8MMYnaokZu+Pux3dywIiNVVLVCXFr00UcTR45M6hdbnLct9cJ+XLJIoJQW2TGz9xINErTMnvlj4n2uIm6nDv2AbR6Ii9+kq+iQIDAQAB";
     protected $clientPrivateKey = "-----BEGIN RSA PRIVATE KEY-----\r\nMIICWwIBAAKBgQCeEk3hNBXhvUKOl62RX2lf9KE1SZ3SCWu5qOWZsCcIBvD6fpDR\r\nP1iuKCmK49lAfP3ntdNRFN8i8MMYnaokZu+Pux3dywIiNVVLVCXFr00UcTR45M6h\r\ndbnLct9cJ+XLJIoJQW2TGz9xINErTMnvlj4n2uIm6nDv2AbR6Ii9+kq+iQIDAQAB\r\nAoGAC3igljtFa0Bk2BxByE74QrJqEIfrIBb27l5Ha0PRUU/PpR4SPF0wflMD0MSA\r\nO6HWez5Cu5ucJdj7D4pBkqq1r8dd7OV+Fmx1NuRhMvbS6ZCMC3SuG9NiW5lA74zF\r\nn6rTLm4pOk1t4mFBkI1SSLn/qnTeY+8XL99qu1awcMYFMAECQQDKXYswd57B5gLL\r\n3K2plIMbvESIdGxFS2Km8VJn1uC+akE7VMiVlb+zPlI0+09mn0WfVt5Kfp5rmP+4\r\nTav2B38JAkEAx/dtVURT8kUePxOEiSwqqVpG1pAB3aLIoQ4TWNzw1X/0vEPT2kS5\r\ncM5kBqUtMmYEpyboTYgDIIAwapdALNmjgQJAeTJA9EwP5qysrA+EanWpd+jvWpHv\r\nbijR8o3A/rOwchoM603Bu+StpNoEPfrs+NcWyXErPI5MrsA5FtZd0MF4kQJAXCcA\r\ncb0NWqbTq4nZGEYMWwNJhfPTiEpOXzpXXCplql5PcLtpVDs7omra2d0hGQq+tjFN\r\n+PznRAEPTu/pGUIrAQJAeUexJMRoPXmxPjSSwNw4C+Exsysek+eiCsxj8fNibN5J\r\n1SwVsv30sUMm+n96Tmv/syE8xlXitb8+LMKvAE7anQ==\r\n-----END RSA PRIVATE KEY-----\r\n";
@@ -25,7 +25,8 @@ class APIVCB
         "tranferIn" => "https://digiapp.vietcombank.com.vn/transfer-service/v1/init-internal-transfer",
         "getBanks" => "https://digiapp.vietcombank.com.vn/utility-service/v1/get-banks",
         "getAccountDeltail" => "https://digiapp.vietcombank.com.vn/bank-service/v1/get-account-detail",
-        "getlistAccount" => "https://digiapp.vietcombank.com.vn/bank-service/v1/get-list-account-via-cif"
+        "getlistAccount" => "https://digiapp.vietcombank.com.vn/bank-service/v1/get-list-account-via-cif",
+        "getlistDDAccount" => "https://digiapp.vietcombank.com.vn/bank-service/v1/get-list-ddaccount"
     ];
     protected $lang = 'vi';
     protected $_timeout = 60;
@@ -143,6 +144,25 @@ class APIVCB
         return $result;
 
     }
+
+    public function getlistDDAccount(){
+        $param = array(
+            "DT" => $this->DT,
+            "OV" => $this->OV,
+            "PM" => $this->PM,
+            "mid" => 35,
+            "cif" => $this->cif,
+            "serviceCode" => "0551",
+            "user" => $this->username,
+            "mobileId" => $this->mobileId,
+            "clientId" => $this->clientId,
+            "sessionId" => $this->sessionId
+        );
+        $result = $this->curlPost($this->url['getlistDDAccount'],$param);
+        return $result;
+
+    }
+
     public function getAccountDeltail(){
         $param = array(
             "DT" => $this->DT,
@@ -248,14 +268,14 @@ class APIVCB
         $result = $this->curlPost($this->url['tranferIn'],$param);
         return $result;
     }
-    public function genOtpTranFer($tranId, $type = "OUT"){
+    public function genOtpTranFer($tranId, $type = "OUT",$otpType = 5){
         $param = array(
             "DT" => $this->DT,
             "OV" => $this->OV,
             "PM" => $this->PM,
             "lang" => $this->lang,
             "tranId" => $tranId,
-            "type" => 5, // 1 là SMS,5 là smart otp
+            "type" => $otpType, // 1 là SMS,5 là smart otp
             "mid" => 17,
             "cif" => $this->cif,
             "user" => $this->username,
