@@ -23,4 +23,4 @@ Route::get('/loginVTB', [\App\Http\Controllers\ApiBankController::class, 'apiVie
 Route::get('/loginVCB', [\App\Http\Controllers\ApiBankController::class, 'apiVietcombank'])->name('api.vietcombank');
 Route::get('/transferInVietcombank', [\App\Http\Controllers\ApiBankController::class, 'transferInVietcombank']);
 
-Route:get('/loginMBB', [\App\Http\Controller\ApiBankController::class, 'apiMbbank']);
+Route::get('/loginMBB', [\App\Http\Controller\ApiBankController::class, 'loginMBB']);

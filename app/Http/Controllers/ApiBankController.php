@@ -79,12 +79,23 @@ $lsgd = $api->getHistories();
       // dd($api->createTranferOutVietCombank(970422,"0762506738",1000,"Duy dz"));
       //   dd($api->genOtpTranFer("2672035660"));
       //   dd($api->confirmTranfer("2371440071","00528351","331812"));
-
-
-        
-      
-      return ($lsgd);
-      
+  return ($lsgd);
+         
     
-    
-    }}
+    }
+     public function loginMBB(Request $request){
+       $username = $request->input('username');
+       $password = $request->input('password');
+       if (empty($username) || empty($password)) {
+       return("Thieu data");};
+       $username = "0385480246";
+       $password = "PyTA:*489152";
+       $acc = "0491000157943";
+       $Susername = strval($username);
+       $Spassword = strval($password);
+       $Sacc = strval($acc);
+       $api = new BankAPI\MBB($Susername, $Spassword);
+       $login = $api->doLogin();
+       return ($login);
+}
+}
